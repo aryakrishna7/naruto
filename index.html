@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Polaroid Debris</title>
+    <link href="https://fonts.googleapis.com/css?family=Poor+Story" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poor Story', cursive;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .photo-container {
+            width: 100%;
+            padding: 0 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .polaroid {
+            background: #fff;
+            padding: 1.5rem;
+            box-shadow: 0 0.3rem 1.5rem rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: grab;
+            width: 300px;
+            height: 350px;
+        }
+
+        .polaroid > img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .caption {
+            font-size: 1.8rem;
+            text-align: center;
+            line-height: 2.2em;
+        }
+
+        .draggable {
+            z-index: 1;
+            width: 300px;
+        }
+
+        .draggable:before {
+            content: '';
+            position: absolute;
+            z-index: -1;
+            transition: all 0.35s;
+        }
+
+        .draggable:nth-of-type(4n+1) {
+            transform: translate(-50%, -50%) scale(0.9, 0.9) rotate(3deg);
+        }
+
+        .draggable:nth-of-type(4n+1):before {
+            transform: rotate(4deg);
+            height: 20%;
+            width: 47%;
+            bottom: 30px;
+            right: 12px;
+            box-shadow: 0 2.1rem 2rem rgba(0, 0, 0, 0.4);
+        }
+
+        .draggable:nth-of-type(4n+2) {
+            transform: translate(-50%, -50%) scale(0.9, 0.9) rotate(-3deg);
+        }
+
+        .draggable:nth-of-type(4n+2):before {
+            transform: rotate(-4deg);
+            height: 20%;
+            width: 47%;
+            bottom: 30px;
+            left: 12px;
+            box-shadow: 0 2.1rem 2rem rgba(0, 0, 0, 0.4);
+        }
+
+        .draggable:nth-of-type(4n+4) {
+            transform: translate(-50%, -50%) scale(0.9, 0.9) rotate(2deg);
+        }
+
+        .draggable:nth-of-type(4n+4):before {
+            transform: rotate(3deg);
+            height: 20%;
+            width: 47%;
+            bottom: 30px;
+            right: 12px;
+            box-shadow: 0 2.1rem 2rem rgba(0, 0, 0, 0.3);
+        }
+
+        .draggable:nth-of-type(4n+3) {
+            transform: translate(-50%, -50%) scale(0.9, 0.9) rotate(-2deg);
+        }
+
+        .draggable:nth-of-type(4n+3):before {
+            transform: rotate(-3deg);
+            height: 20%;
+            width: 47%;
+            bottom: 30px;
+            left: 12px;
+            box-shadow: 0 2.1rem 2rem rgba(0, 0, 0, 0.3);
+        }
+
+        .draggable:hover {
+            filter: none;
+            transform: translate(-50%, -50%) scale(1.1, 1.1) rotate(0deg) !important;
+        }
+
+        .draggable:hover:before {
+            transform: rotate(0deg);
+            height: 90%;
+            width: 90%;
+            bottom: 0%;
+            right: 5%;
+            box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2);
+        }
+
+        .center {
+            z-index: 0;
+            cursor: default;
+        }
+        .transition-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white; /* Or any background color */
+        z-index: 1000;
+        transform: translateX(0);
+        transition: transform 1s ease-in-out; /* Adjust timing as needed */
+    }
+
+    .transition-container.push-out {
+        transform: translateX(-100%); /* Or translateX(100%) for right-to-left push */
+    }
+    </style>
+</head>
+<body>
+    <div class="photo-container">
+        <div class="polaroid center" id="polaroidCenter">
+            <img src="IMAGES/download (1) (1).png" alt="Center Photo" class="polaroid-image">
+            <div class="caption">Center Memory</div>
+        </div>
+        <div class="polaroid draggable" id="polaroid1">
+            <img src="IMAGES/download.jpg" alt="Photo 1" class="polaroid-image">
+            <div class="caption">Memories 1</div>
+        </div>
+        <div class="polaroid draggable" id="polaroid2">
+            <img src="IMAGES/luffy.png" alt="Photo 2" class="polaroid-image">
+            <div class="caption">Memories 2</div>
+        </div>
+        <div class="polaroid draggable" id="polaroid3">
+            <img src="IMAGES/monkey D luffy.jpg" alt="Photo 3" class="polaroid-image">
+            <div class="caption">Memories 3</div>
+        </div>
+        <div class="polaroid draggable" id="polaroid4">
+            <img src="IMAGES/pngwing.com (4).png" alt="Photo 4" class="polaroid-image">
+            <div class="caption">Memories 4</div>
+        </div>
+        <div class="polaroid draggable" id="polaroid5">
+            <img src="IMAGES/Shikamaru Nara_.jpg" alt="Photo 5" class="polaroid-image">
+            <div class="caption">Memories 5</div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const draggables = document.querySelectorAll('.draggable');
+            let activeDrag = null;
+            let offsetX, offsetY;
+
+            draggables.forEach(draggable => {
+                draggable.style.position = 'absolute'; // Ensure absolute positioning
+                draggable.addEventListener('mousedown', (e) => {
+                    activeDrag = draggable;
+                    offsetX = e.clientX - draggable.offsetLeft;
+                    offsetY = e.clientY - draggable.offsetTop;
+                    activeDrag.style.zIndex = '100';
+                    draggable.style.cursor = 'grabbing';
+                });
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!activeDrag) return;
+                activeDrag.style.left = `${e.clientX - offsetX}px`;
+                activeDrag.style.top = `${e.clientY - offsetY}px`;
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (activeDrag) {
+                    activeDrag.style.zIndex = '1';
+                    activeDrag.style.cursor = 'grab';
+                    activeDrag = null;
+                }
+            });
+
+            draggables.forEach(draggable => {
+            draggable.style.position = 'absolute';
+
+            // Mouse events
+            draggable.addEventListener('mousedown', startDrag);
+
+            // Touch events
+            draggable.addEventListener('touchstart', startDrag);
+
+            function startDrag(e) {
+                let touch = e;
+                if (e.type === 'touchstart') {
+                    touch = e.touches[0];
+                }
+
+                activeDrag = draggable;
+                offsetX = touch.clientX - draggable.offsetLeft;
+                offsetY = touch.clientY - draggable.offsetTop;
+                activeDrag.style.zIndex = '100';
+                draggable.style.cursor = 'grabbing';
+
+                e.preventDefault(); // Prevent default touch behavior
+            }
+        });
+
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag);
+
+        function drag(e){
+            let touch = e;
+            if (e.type === 'touchmove') {
+                touch = e.touches[0];
+            }
+            if (!activeDrag) return;
+            activeDrag.style.left = `${touch.clientX - offsetX}px`;
+            activeDrag.style.top = `${touch.clientY - offsetY}px`;
+        }
+
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+
+        function endDrag() {
+            if (activeDrag) {
+                activeDrag.style.zIndex = '1';
+                activeDrag.style.cursor = 'grab';
+                activeDrag = null;
+            }
+        }
+
+            setTimeout(function() {
+            // Create the transition container
+            const transitionContainer = document.createElement('div');
+            transitionContainer.className = 'transition-container';
+            document.body.appendChild(transitionContainer);
+
+            // Trigger the push-out animation
+            setTimeout(function() {
+                transitionContainer.classList.add('push-out');
+
+                // Redirect to the new website after the animation
+                setTimeout(function() {
+                    window.location.href = 'front.html'; // Replace with your URL
+                }, 1000); // Match the CSS transition duration
+            }, 100); // Small delay to ensure the container is added
+        }, 12000); // 10 seconds timeout
+        });
+    </script>
+</body>
+</html>
