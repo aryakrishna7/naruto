@@ -149,33 +149,89 @@
     .transition-container.push-out {
         transform: translateX(-100%); /* Or translateX(100%) for right-to-left push */
     }
+
+/* CSS */
+.button-53 {
+  background-color: #3DD1E7;
+  border: 0 solid #E5E7EB;
+  box-sizing: border-box;
+  color: #000000;
+  display: flex;
+  font-family: ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1.75rem;
+  padding: .75rem 1.65rem;
+  position: relative;
+  text-align: center;
+  text-decoration: none #000000 solid;
+  text-decoration-thickness: auto;
+  width: 100%;
+  max-width: 460px;
+  position: relative;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-53:focus {
+  outline: 0;
+}
+
+.button-53:after {
+  content: '';
+  position: absolute;
+  border: 1px solid #000000;
+  bottom: 4px;
+  left: 4px;
+  width: calc(100% - 1px);
+  height: calc(100% - 1px);
+}
+
+.button-53:hover:after {
+  bottom: 2px;
+  left: 2px;
+}
+
+@media (min-width: 768px) {
+  .button-53 {
+    padding: .75rem 3rem;
+    font-size: 1.25rem;
+  }
+}
     </style>
 </head>
 <body>
     <div class="photo-container">
         <div class="polaroid center" id="polaroidCenter">
-            <img src="IMAGES/download (1) (1).png" alt="Center Photo" class="polaroid-image">
-            <div class="caption">Center Memory</div>
+            <img src="IMAGES/surpriseinside-present.gif" alt="Center Photo" class="polaroid-image">
+            <div class="caption"><a href="front.html"><button class="button-53" role="button">See the suprise :)</button></a></div>
         </div>
         <div class="polaroid draggable" id="polaroid1">
-            <img src="IMAGES/download.jpg" alt="Photo 1" class="polaroid-image">
-            <div class="caption">Memories 1</div>
+            <img src="IMAGES/IMG_20250228_195548_731.jpg" alt="Photo 1" class="polaroid-image">
+            <div class="caption">Beautiful Soul Always 💖</div>
         </div>
         <div class="polaroid draggable" id="polaroid2">
-            <img src="IMAGES/luffy.png" alt="Photo 2" class="polaroid-image">
-            <div class="caption">Memories 2</div>
+            <img src="IMAGES/IMG-20250223-WA0044.jpg" alt="Photo 2" class="polaroid-image">
+            <div class="caption">Forever My Sunshine ☀️</div>
         </div>
         <div class="polaroid draggable" id="polaroid3">
-            <img src="IMAGES/monkey D luffy.jpg" alt="Photo 3" class="polaroid-image">
-            <div class="caption">Memories 3</div>
+            <img src="IMAGES/IMG-20250223-WA0045.jpg" alt="Photo 3" class="polaroid-image">
+            <div class="caption">Smile Worth Millions 😊
+            </div>
         </div>
         <div class="polaroid draggable" id="polaroid4">
-            <img src="IMAGES/pngwing.com (4).png" alt="Photo 4" class="polaroid-image">
-            <div class="caption">Memories 4</div>
+            <img src="IMAGES/IMG-20250223-WA0046.jpg" alt="Photo 4" class="polaroid-image">
+            <div class="caption">Queen of Vibes 👑
+            </div>
         </div>
         <div class="polaroid draggable" id="polaroid5">
-            <img src="IMAGES/Shikamaru Nara_.jpg" alt="Photo 5" class="polaroid-image">
-            <div class="caption">Memories 5</div>
+            <img src="IMAGES/IMG-20250223-WA0047.jpg" alt="Photo 5" class="polaroid-image">
+            <div class="caption">My Favourite Person 💕
+            </div>
         </div>
     </div>
     <script>
@@ -258,7 +314,7 @@
             }
         }
 
-            setTimeout(function() {
+           /* setTimeout(function() {
             // Create the transition container
             const transitionContainer = document.createElement('div');
             transitionContainer.className = 'transition-container';
@@ -273,8 +329,10 @@
                     window.location.href = 'front.html'; // Replace with your URL
                 }, 1000); // Match the CSS transition duration
             }, 100); // Small delay to ensure the container is added
-        }, 12000); // 10 seconds timeout
+        }, 12000); // 10 seconds timeout*/
         });
+
+
     </script>
 </body>
 </html>
